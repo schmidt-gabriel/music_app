@@ -21,13 +21,13 @@ class SettingsController with ChangeNotifier {
   late ThemeMode _themeMode;
 
   // Make User a private variable so it is not updated directly without
-  User? _user = FirebaseAuth.instance.currentUser;
+  // User? _user = FirebaseAuth.instance.currentUser;
 
   // Allow Widgets to read the user's preferred ThemeMode.
   ThemeMode get themeMode => _themeMode;
 
   // Allow Widgets to read the user.
-  User? get user => _user;
+  // User? get user => _user;
   bool userIssue = false;
 
   /// Load the user's settings from the SettingsService. It may load from a
@@ -59,21 +59,21 @@ class SettingsController with ChangeNotifier {
   }
 
   // Update and persist the User.
-  Future<void> updateUser() async {
-    _user = await getAuth();
+  // Future<void> updateUser() async {
+  //   // _user = await getAuth();
 
-    if (_user == null) {
-      userIssue = true;
-      notifyListeners();
-      return;
-    }
-    notifyListeners();
-    await _settingsService.updateUser(_user!);
-  }
+  //   if (_user == null) {
+  //     userIssue = true;
+  //     notifyListeners();
+  //     return;
+  //   }
+  //   notifyListeners();
+  //   await _settingsService.updateUser(_user!);
+  // }
 
   // Sign out the User.
   void signOut() async {
-    _user = null;
+    // _user = null;
     signOutFromGoogle();
     notifyListeners();
     await _settingsService.signOut();

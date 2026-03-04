@@ -123,4 +123,29 @@ class API {
       return jsonDecode(response.body)["Message"];
     }
   }
+
+  Future<Map<String, dynamic>> fetchTotals() async {
+    print("fetchTotals");
+    
+    try {
+      final response = await http
+          .get(
+            Uri.https(apiURL, "/totals"),
+            headers: await getHeaders(),
+          )
+          .timeout(const Duration(seconds: 30));
+
+      if (response.statusCode == 401 ||
+          utf8.decode(response.bodyBytes).contains("Failed to validate JWT.")) {
+        fetchToken(force: true);
+        return fetchTotals();
+      } else if (response.statusCode == 200) {
+        return jsonDecode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
+      } else {
+        throw Exception('Failed to load totals');
+      }
+    } catch (e) {
+      throw e.toString();
+    }
+  }
 }

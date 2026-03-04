@@ -37,11 +37,13 @@ class SettingsView extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Settings'),
       ),
-      body: controller.user == null
-          ? const SizedBox(
-              width: 15,
-            )
-          : Padding(
+      body: 
+          // controller.user == null
+          // ? const SizedBox(
+          //     width: 15,
+          //   )
+          // : 
+          Padding(
               padding: const EdgeInsets.all(16),
               // Glue the SettingsController to the theme selection DropdownButton.
               //
@@ -55,10 +57,10 @@ class SettingsView extends StatelessWidget {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: Colors.white,
-                      image: DecorationImage(
-                        fit: BoxFit.fill,
-                        image: NetworkImage(controller.user!.photoURL!),
-                      ),
+                      // image: DecorationImage(
+                        // fit: BoxFit.fill,
+                        // image: NetworkImage(controller.user!.photoURL!),
+                      // ),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -73,7 +75,7 @@ class SettingsView extends StatelessWidget {
                               fontSize: 18, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(width: 8),
-                        Text(controller.user!.displayName!),
+                        // Text(controller.user!.displayName!),
                       ],
                     ),
                   ),
@@ -88,7 +90,7 @@ class SettingsView extends StatelessWidget {
                               fontSize: 18, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(width: 8),
-                        Text(controller.user!.email!),
+                        // Text(controller.user!.email!),
                       ],
                     ),
                   ),

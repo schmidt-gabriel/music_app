@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'settings_view.dart';
 import 'albums_view.dart';
+import 'totals_view.dart';
 import '../utils/api.dart';
 import '../models/artist.dart';
 
@@ -135,6 +136,14 @@ class _ArtistListViewState extends State<ArtistListView> {
                       }
                       _searchBar = !_searchBar;
                     });
+                  },
+                ),
+                IconButton(
+                  icon: const Icon(Icons.bar_chart),
+                  color: Theme.of(context).hintColor,
+                  onPressed: () {
+                    Navigator.restorablePushNamed(
+                        context, TotalsView.routeName);
                   },
                 ),
                 IconButton(

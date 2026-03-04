@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
+import 'localization/app_localizations.dart';
 import 'views/album_view.dart';
 import 'views/albums_view.dart';
 import 'views/artist_view.dart';
 import 'views/handle_album.dart';
 import 'views/auth_view.dart';
+import 'views/totals_view.dart';
 import 'settings/settings_controller.dart';
 import 'views/settings_view.dart';
 
@@ -66,7 +67,7 @@ class MyApp extends StatelessWidget {
           ),
           darkTheme: ThemeData(
             brightness: Brightness.dark,
-            primaryColor:  Colors.black26,
+            primaryColor: Colors.black26,
             hintColor: Colors.white,
           ),
           themeMode: settingsController.themeMode,
@@ -88,15 +89,18 @@ class MyApp extends StatelessWidget {
                     return AlbumItemDetailsView(album: arguments!);
                   case HandleAlbumView.routeName:
                     return HandleAlbumView(album: arguments!);
+                  case TotalsView.routeName:
+                    return const TotalsView();
                   case ArtistListView.routeName:
                     return const ArtistListView();
                   case AuthView.routeName:
                   default:
-                    return settingsController.user == null
-                        ? AuthView(
-                            controller: settingsController,
-                          )
-                        : const ArtistListView();
+                    return const ArtistListView();
+                  // return settingsController.user == null
+                  //     ? AuthView(
+                  //         controller: settingsController,
+                  //       )
+                  //     : const ArtistListView();
                 }
               },
             );

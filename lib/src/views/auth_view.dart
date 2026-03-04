@@ -57,7 +57,7 @@ class _AuthViewState extends State<AuthView> {
                       ),
                     ),
                     onPressed: () {
-                      widget.controller.updateUser();
+                      // widget.controller.updateUser();
                       setState(() {
                         isLoading = true;
                       });

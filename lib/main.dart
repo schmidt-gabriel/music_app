@@ -10,7 +10,6 @@ import 'package:firebase_core/firebase_core.dart';
 void main() async {
   // Initialize Firebase
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
   
   // Set up the SettingsController, which will glue user settings to multiple
   // Flutter Widgets.
