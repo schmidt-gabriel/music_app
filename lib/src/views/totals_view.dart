@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import '../utils/api.dart';
 import 'settings_view.dart';
 
+enum SortOption { 
+  countDesc, 
+  countAsc
+}
+
 /// Displays totals statistics for buy years, media types, and release years.
 class TotalsView extends StatefulWidget {
   const TotalsView({super.key});
@@ -18,6 +23,7 @@ class _TotalsViewState extends State<TotalsView> {
   bool isLoading = true;
   bool hasError = false;
   String errorMessage = '';
+  SortOption _currentSort = SortOption.countDesc;
 
   @override
   void initState() {
@@ -39,6 +45,21 @@ class _TotalsViewState extends State<TotalsView> {
         isLoading = false;
       });
     }
+  }
+
+  List<MapEntry<String, dynamic>> _sortMediaData(Map<String, dynamic> mediaData) {
+    List<MapEntry<String, dynamic>> sortedEntries = mediaData.entries.toList();
+    
+    switch (_currentSort) {
+      case SortOption.countDesc:
+        sortedEntries.sort((a, b) => (b.value as int).compareTo(a.value as int));
+        break;
+      case SortOption.countAsc:
+        sortedEntries.sort((a, b) => (a.value as int).compareTo(b.value as int));
+        break;
+    }
+    
+    return sortedEntries;
   }
 
   Widget _buildMediaCard(String mediaType, int count, int total) {
@@ -96,18 +117,6 @@ class _TotalsViewState extends State<TotalsView> {
       return Scaffold(
         appBar: AppBar(
           title: const Text('Totals'),
-          flexibleSpace: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Theme.of(context).cardColor,
-                  Theme.of(context).hoverColor,
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-            ),
-          ),
           actions: [
             IconButton(
               icon: const Icon(Icons.settings),
@@ -154,19 +163,26 @@ class _TotalsViewState extends State<TotalsView> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Totals'),
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Theme.of(context).cardColor,
-                Theme.of(context).hoverColor,
-              ],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-          ),
-        ),
         actions: [
+          PopupMenuButton<SortOption>(
+            icon: const Icon(Icons.sort),
+            tooltip: 'Sort options',
+            onSelected: (SortOption option) {
+              setState(() {
+                _currentSort = option;
+              });
+            },
+            itemBuilder: (BuildContext context) => [
+              const PopupMenuItem(
+                value: SortOption.countDesc,
+                child: Text('Highest count first'),
+              ),
+              const PopupMenuItem(
+                value: SortOption.countAsc,
+                child: Text('Lowest count first'),
+              ),
+            ],
+          ),
           IconButton(
             icon: const Icon(Icons.refresh),
             color: Theme.of(context).hintColor,
@@ -213,8 +229,10 @@ class _TotalsViewState extends State<TotalsView> {
                                   .cast<int>()
                                   .fold<int>(0, (sum, count) => sum + count);
                               
+                              final sortedEntries = _sortMediaData(mediaData);
+                              
                               return ListView(
-                                children: mediaData.entries
+                                children: sortedEntries
                                     .map((entry) => _buildMediaCard(
                                           entry.key,
                                           entry.value as int,

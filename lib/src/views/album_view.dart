@@ -6,6 +6,8 @@ import 'package:music_app/src/utils/discogs.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'handle_album.dart';
 import '../utils/api.dart';
+import '../widgets/modern_app_bar.dart';
+import '../widgets/album_detail_widgets.dart';
 
 /// Displays detailed information about a SampleItem.
 class AlbumItemDetailsView extends StatefulWidget {
@@ -36,8 +38,8 @@ class _AlbumItemDetailsViewState extends State<AlbumItemDetailsView> {
     final TextEditingController discogsIdController = TextEditingController();
     Album album = Album.fromJSON(widget.album as Map<String, dynamic>);
     return Scaffold(
-      appBar: AppBar(
-        title: FittedBox(fit: BoxFit.fitWidth, child: Text(album.title)),
+      appBar: GradientAppBar(
+        title: album.title,
         actions: [
           DropdownButton(
             underline: Container(),
@@ -148,294 +150,123 @@ class _AlbumItemDetailsViewState extends State<AlbumItemDetailsView> {
           )
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Colors.grey,
-                  width: 2,
-                ),
-              ),
-              child: album.discogs.coverImage != ""
-                  ? Image.network(
-                      album.discogs.coverImage,
-                      loadingBuilder: (context, child, loadingProgress) {
-                        if (loadingProgress == null) return child;
-                        return const CircularProgressIndicator();
-                      },
-                      fit: BoxFit.cover,
-                    )
-                  : const Text("Não há imagem"),
-            ),
-            ListTile(
-              leading: const Text("Título:"),
-              title: Text(
-                album.title,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ),
-            ListTile(
-              leading: const Text("Artista:"),
-              title: Text(
-                album.artist,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ),
-            ListTile(
-              leading: const Text("Ano de lançamento:"),
-              title: Text(
-                album.releaseYear.toString(),
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ),
-            ListTile(
-              leading: const Text("Mídia:"),
-              title: Text(
-                album.media,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ),
-            ListTile(
-              leading: const Text("Origem:"),
-              title: Text(
-                album.origin,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ),
-            ListTile(
-              leading: const Text("Ano de edição:"),
-              title: Text(
-                album.editionYear.toString(),
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ),
-            ListTile(
-              leading: const Text("Compra:"),
-              title: Text(
-                album.purchase,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ),
-            ListTile(
-              leading: const Text("IFPI Mastering:"),
-              title: Text(
-                album.ifpiMastering,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ),
-            ListTile(
-              leading: const Text("IFPI Mould:"),
-              title: Text(
-                album.ifpiMould,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ),
-            ListTile(
-              leading: const Text("Barcode:"),
-              title: Text(
-                album.barcode,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ),
-            ListTile(
-              leading: const Text("Lote:"),
-              title: Text(
-                album.lote,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ),
-            ListTile(
-              leading: const Text("Observação:"),
-              title: Text(album.obs),
-            ),
-            Container(
-              padding: const EdgeInsets.all(16.0),
-              decoration: BoxDecoration(
-                color: Colors.white10,
-                borderRadius: BorderRadius.circular(30),
-                border: Border.all(
-                  color: Colors.white30,
-                  width: 2,
-                ),
-              ),
-              child: Column(
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.only(left: 16.0),
-                    child: Text(
-                      "Discos",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: album.discs.length,
-                    itemBuilder: (context, index) {
-                      final item = album.discs[index];
-                      return Container(
-                        padding: const EdgeInsets.all(16.0),
-                        decoration: BoxDecoration(
-                          color: Colors.white10,
-                          borderRadius: BorderRadius.circular(30),
-                          border: Border.all(
-                            color: Colors.white30,
-                            width: 2,
-                          ),
-                        ),
-                        child: Column(
-                          children: [
-                            Divider(color: Colors.black),
-                            Text(
-                              item.discNumber,
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            ListTile(
-                              leading: Text("Peso:"),
-                              title: Text(
-                                item.weight,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            ListTile(
-                              leading: Text("Matriz:"),
-                              title: Text(
-                                item.matriz
-                                    .map(
-                                      (e) => e.toString(),
-                                    )
-                                    .join(", "),
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            Divider(color: Colors.black)
-                          ],
-                        ),
-                      );
-                    },
-                  )
-                ],
-              ),
-            ),
-            // Add section for tracklist
-            Container(
-              padding: const EdgeInsets.all(16.0),
-              decoration: BoxDecoration(
-                color: Colors.white10,
-                borderRadius: BorderRadius.circular(30),
-                border: Border.all(
-                  color: Colors.white30,
-                  width: 2,
-                ),
-              ),
-              child: Column(
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.only(left: 16.0),
-                    child: Text(
-                      "Tracklist",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                  album.discogs.tracks.isEmpty
-                      ? Container(
-                          alignment: Alignment.center,
-                          height: 100,
-                          child: const Text("Não há tracklist"),
-                        )
-                      : ListView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: album.discogs.tracks.length,
-                          itemBuilder: (context, index) {
-                            final item = album.discogs.tracks[index];
-                            return ListTile(
-                              visualDensity: const VisualDensity(
-                                  horizontal: -4, vertical: -4),
-                              leading: Text(
-                                item.position,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              title: Text(
-                                item.title,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              trailing: Text(
-                                item.duration,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            );
-                          },
-                        ),
-                ],
-              ),
-            ),
-          ],
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Theme.of(context).colorScheme.primary.withOpacity(0.05),
+              Theme.of(context).colorScheme.surface,
+            ],
+          ),
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              AlbumHeaderCard(album: album),
+              AlbumDetailsSection(album: album),
+              DiscsSection(album: album),
+              TracklistSection(album: album),
+              const SizedBox(height: 80), // Space for FAB
+            ],
+          ),
         ),
       ),
       floatingActionButton: SpeedDial(
         animatedIcon: AnimatedIcons.menu_close,
-        spaceBetweenChildren: 20,
+        animatedIconTheme: IconThemeData(
+          color: Colors.white,
+          size: 24,
+        ),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Colors.white,
+        overlayColor: Colors.black,
+        overlayOpacity: 0.5,
+        spaceBetweenChildren: 16,
+        childPadding: const EdgeInsets.all(8),
         children: [
           SpeedDialChild(
-            child: Image.asset("assets/images/discogs.png"),
-            backgroundColor: Colors.transparent,
-            label: "Discogs",
+            child: Container(
+              width: 32,
+              height: 32,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                color: Colors.white,
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                child: Image.asset(
+                  "assets/images/discogs.png",
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            backgroundColor: Theme.of(context).colorScheme.surface,
+            foregroundColor: Theme.of(context).colorScheme.onSurface,
+            label: "Open in Discogs",
+            labelStyle: TextStyle(
+              color: Theme.of(context).colorScheme.onSurface,
+              fontWeight: FontWeight.w500,
+            ),
             onTap: () async {
-              if (album.discogs.urls == []) {
+              if (album.discogs.urls.isEmpty) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text("Não há link para o Discogs"),
+                  SnackBar(
+                    content: const Text("No Discogs link available"),
+                    backgroundColor: Theme.of(context).colorScheme.error,
+                    behavior: SnackBarBehavior.floating,
                   ),
                 );
                 return;
               }
-              Uri spotifyUrl = Uri.parse(
+              Uri discogsUrl = Uri.parse(
                   "https://www.discogs.com${album.discogs.urls[0].uri}");
-              // Check if Spotify is installed
-              if (await canLaunchUrl(spotifyUrl)) {
-                // Launch the url which will open Spotify
-                launchUrl(spotifyUrl);
+              if (await canLaunchUrl(discogsUrl)) {
+                launchUrl(discogsUrl);
               }
             },
           ),
           SpeedDialChild(
-              child: Image.asset("assets/images/spotify.png"),
-              backgroundColor: Colors.transparent,
-              label: "Spotify",
-              onTap: () async {
-                if (album.spotify.externalUrls["spotify"] == null) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("Não há link para o Spotify"),
-                    ),
-                  );
-                  return;
-                }
-                Uri spotifyUrl =
-                    Uri.parse(album.spotify.externalUrls["spotify"]!);
-                // Check if Spotify is installed
-                if (await canLaunchUrl(spotifyUrl)) {
-                  // Launch the url which will open Spotify
-                  launchUrl(spotifyUrl);
-                }
-              })
+            child: Container(
+              width: 32,
+              height: 32,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                color: Colors.white,
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                child: Image.asset(
+                  "assets/images/spotify.png",
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            backgroundColor: Theme.of(context).colorScheme.surface,
+            foregroundColor: Theme.of(context).colorScheme.onSurface,
+            label: "Open in Spotify",
+            labelStyle: TextStyle(
+              color: Theme.of(context).colorScheme.onSurface,
+              fontWeight: FontWeight.w500,
+            ),
+            onTap: () async {
+              if (album.spotify.externalUrls["spotify"] == null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: const Text("No Spotify link available"),
+                    backgroundColor: Theme.of(context).colorScheme.error,
+                    behavior: SnackBarBehavior.floating,
+                  ),
+                );
+                return;
+              }
+              Uri spotifyUrl = Uri.parse(album.spotify.externalUrls["spotify"]!);
+              if (await canLaunchUrl(spotifyUrl)) {
+                launchUrl(spotifyUrl);
+              }
+            },
+          ),
         ],
       ),
     );

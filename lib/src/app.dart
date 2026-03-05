@@ -6,10 +6,10 @@ import 'views/album_view.dart';
 import 'views/albums_view.dart';
 import 'views/artist_view.dart';
 import 'views/handle_album.dart';
-import 'views/auth_view.dart';
 import 'views/totals_view.dart';
 import 'settings/settings_controller.dart';
 import 'views/settings_view.dart';
+import 'theme/app_theme.dart';
 
 /// The Widget that configures your application.
 class MyApp extends StatelessWidget {
@@ -35,6 +35,7 @@ class MyApp extends StatelessWidget {
           // returns to the app after it has been killed while running in the
           // background.
           restorationScopeId: 'app',
+          debugShowCheckedModeBanner: false,
 
           // Provide the generated AppLocalizations to the MaterialApp. This
           // allows descendant Widgets to display the correct translations
@@ -60,16 +61,8 @@ class MyApp extends StatelessWidget {
           // Define a light and dark color theme. Then, read the user's
           // preferred ThemeMode (light, dark, or system default) from the
           // SettingsController to display the correct theme.
-          theme: ThemeData(
-            brightness: Brightness.light,
-            primaryColor: Colors.white,
-            hintColor: Colors.black,
-          ),
-          darkTheme: ThemeData(
-            brightness: Brightness.dark,
-            primaryColor: Colors.black26,
-            hintColor: Colors.white,
-          ),
+          theme: AppTheme.lightTheme,
+          darkTheme: AppTheme.darkTheme,
           themeMode: settingsController.themeMode,
 
           // Define a function to handle named routes in order to support
@@ -93,14 +86,8 @@ class MyApp extends StatelessWidget {
                     return const TotalsView();
                   case ArtistListView.routeName:
                     return const ArtistListView();
-                  case AuthView.routeName:
                   default:
                     return const ArtistListView();
-                  // return settingsController.user == null
-                  //     ? AuthView(
-                  //         controller: settingsController,
-                  //       )
-                  //     : const ArtistListView();
                 }
               },
             );

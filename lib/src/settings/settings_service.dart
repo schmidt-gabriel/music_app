@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 /// A service that stores and retrieves user settings.
 ///
@@ -12,11 +11,6 @@ class SettingsService {
 
   /// Persists the user's preferred ThemeMode to local or remote storage.
   Future<void> updateThemeMode(ThemeMode theme) async {
-    // Use the shared_preferences package to persist settings locally or the
-    // http package to persist settings over the network.
-  }
-
-  Future<void> updateUser(User user) async {
     // Use the shared_preferences package to persist settings locally or the
     // http package to persist settings over the network.
   }
