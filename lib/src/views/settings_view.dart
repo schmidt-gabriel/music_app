@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../settings/settings_controller.dart';
-import 'auth_view.dart';
 
 /// Displays the various settings that can be customized by the user.
 ///
@@ -37,11 +36,13 @@ class SettingsView extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Settings'),
       ),
-      body: controller.user == null
-          ? const SizedBox(
-              width: 15,
-            )
-          : Padding(
+      body: 
+          // controller.user == null
+          // ? const SizedBox(
+          //     width: 15,
+          //   )
+          // : 
+          Padding(
               padding: const EdgeInsets.all(16),
               // Glue the SettingsController to the theme selection DropdownButton.
               //
@@ -49,49 +50,7 @@ class SettingsView extends StatelessWidget {
               // SettingsController is updated, which rebuilds the MaterialApp.
               child: Column(
                 children: [
-                  Container(
-                    width: 150,
-                    height: 150,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.white,
-                      image: DecorationImage(
-                        fit: BoxFit.fill,
-                        image: NetworkImage(controller.user!.photoURL!),
-                      ),
-                    ),
-                  ),
                   const SizedBox(height: 16),
-                  container(
-                    context,
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        const Text(
-                          'Usuario',
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(width: 8),
-                        Text(controller.user!.displayName!),
-                      ],
-                    ),
-                  ),
-                  container(
-                    context,
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        const Text(
-                          'Email',
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(width: 8),
-                        Text(controller.user!.email!),
-                      ],
-                    ),
-                  ),
                   container(
                     context,
                     Row(
@@ -125,16 +84,6 @@ class SettingsView extends StatelessWidget {
                         ),
                       ],
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                  // Logot button
-                  ElevatedButton(
-                    onPressed: () {
-                      controller.signOut();
-                      Navigator.of(context).pushNamedAndRemoveUntil(
-                          AuthView.routeName, (Route<dynamic> route) => false);
-                    },
-                    child: const Text('Logout'),
                   ),
                 ],
               ),
